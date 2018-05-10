@@ -13,6 +13,12 @@
 #include "gps.h"
 #include "DS18B20.h"
 
+void printListLoop(l) {
+	for(int i=0; i < sizeof(l)/sizeof(float); ++i)
+		printf("Temp[%d]: %f ", i, l[i]);
+	printf("\n");
+}
+
 void *DS18B20Loop(void *some_void_ptr)
 {
     DIR *dir;
@@ -32,7 +38,6 @@ void *DS18B20Loop(void *some_void_ptr)
 		if ((dir = opendir(folder)) != NULL)
 		{
 			SensorCount = 0;
-			//printf("SensorCount: %d\n", SensorCount);
 			while (((dp = readdir(dir)) != NULL) && (SensorCount < 2))
 			{
 				if (strlen(dp->d_name) > 3)
@@ -55,9 +60,7 @@ void *DS18B20Loop(void *some_void_ptr)
 										Temperature = atof(value) / 1000;
 										//printf("DS %d Temperature is: %5.3fC\n", SensorCount, Temperature);
 										GPS->DS18B20Temperature[SensorCount++] = Temperature;
-										//for(int i=0; i < sizeof(GPS->DS18B20Temperature)/sizeof(float); ++i)
-										//	printf("Temp[%d]: %f ", i, GPS->DS18B20Temperature[i]);
-										//printf("\n");
+										//printListLoop(GPS->DS18B20Temperature);
 									}
 								}
 							}
@@ -79,7 +82,7 @@ void *DS18B20Loop(void *some_void_ptr)
 		
 		//if (GPS->DS18B20Count == 0)
 		{
-			// Use the GPU sensor instead
+			// find GPU Temperature
 			FILE *fp;
 			double T;
 			
@@ -89,9 +92,7 @@ void *DS18B20Loop(void *some_void_ptr)
 				fscanf (fp, "%lf", &T);
 				GPS->DS18B20Temperature[GPS->DS18B20Count] = T / 1000;
 				//printf ("GPU temperature is %6.3f C.\n", GPS->DS18B20Temperature[0]);
-				//for(int i = 0; i < sizeof(GPS->DS18B20Temperature) / sizeof(float); ++i)
-				//	printf("Temp[%d]: %f", i, GPS->DS18B20Temperature[i]);
-				//printf("\n");
+				//printListLoop(GPS->DS18B20Temperature);
 				//GPS->DS18B20Count = 1;
 				fclose (fp);
 			}
