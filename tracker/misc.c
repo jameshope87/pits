@@ -816,7 +816,7 @@ int BuildSentence(unsigned char *TxLine, int Channel, struct TGPS *GPS)
 	}
 	
 	// Second DS18B20 Temperature Sensor, if available
-	if (GPS->DS18B20Count > 1)
+	//if (GPS->DS18B20Count > 1)
 	{
 		sprintf(ExtraFields3, ",%3.1f", GPS->DS18B20Temperature[Config.ExternalDS18B20]);
 		if (ShowFields) printf(",Ext.Temp");
